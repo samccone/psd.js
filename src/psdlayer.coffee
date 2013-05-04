@@ -104,7 +104,7 @@ class PSDLayer
 
     @parseBlendingRanges()
     @parseLegacyLayerName()
-    @parseExtraData()
+    # @parseExtraData()
 
     @name = @legacyName unless @name?
 
@@ -244,7 +244,7 @@ class PSDLayer
     pos = @file.tell()
 
     @blendingRanges.numChannels = (length - 8) / 8
-    assert @blendingRanges.numChannels > 0
+    # assert @blendingRanges.numChannels > 0
 
     @blendingRanges.channels = []
     for i in [0...@blendingRanges.numChannels]
