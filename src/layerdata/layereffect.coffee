@@ -58,11 +58,11 @@ class PSDEffectsDescriptor extends PSDDescriptor
   parseItem: (id) ->
     type = @file.readString(4)
 
-    data = switch id
-      when "patternFill" then @parseLayerPatternOverlay()
-      else super(id, type)
+    # data = switch id
+    #   when "patternFill" then @parseLayerPatternOverlay()
+    #   else super(id, type)
 
-    data
+    data = super(id, type)
 
 class PSDLayerEffect
 
