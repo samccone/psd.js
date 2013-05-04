@@ -1,4 +1,4 @@
-# libpsd has effect layer parsing 
+# libpsd has effect layer parsing
 # see https://github.com/alco/psdump/blob/master/libpsd-0.9
 
 class PSDEffectsInfo
@@ -34,10 +34,10 @@ class PSDEffectsInfo
 
       Log.debug("Parsing effect layer with type #{type} and size #{size}")
 
-      effect =    
+      effect =
         switch type
           when "cmnS" then new PSDLayerEffectCommonStateInfo @file
-          when "dsdw" then new PSDDropDownLayerEffect @file     
+          when "dsdw" then new PSDDropDownLayerEffect @file
           when "isdw" then new PSDDropDownLayerEffect @file, true # inner drop shadow
 
       data = effect?.parse()
@@ -45,7 +45,7 @@ class PSDEffectsInfo
       left = (pos + size) - @file.tell()
       if left != 0
        Log.debug("Failed to parse effect layer with type #{type}")
-       @file.seek left 
+       @file.seek left
       else
         effects.push(data) unless type == "cmnS" # ignore commons state info
 
@@ -67,7 +67,7 @@ class PSDEffectsDescriptor extends PSDDescriptor
 class PSDLayerEffect
 
   constructor: (@file) ->
-  
+
   parse: ->
     # these are common to all effects
     [@version] = @file.readf ">i"
@@ -75,10 +75,10 @@ class PSDLayerEffect
   getSpaceColor: ->
     @file.read(2) # 2 bytes for space
     @file.readf ">HHHH" # 4 * 2 byte color component - r, g, b, a
-   
+
 class PSDLayerEffectCommonStateInfo extends PSDLayerEffect
 
-  parse: -> 
+  parse: ->
     super()
     # always true
     @visible = @file.readBoolean()
@@ -90,10 +90,10 @@ class PSDLayerEffectCommonStateInfo extends PSDLayerEffect
 # Based on https://github.com/alco/psdump/blob/master/libpsd-0.9/src/drop_shadow.c
 class PSDDropDownLayerEffect extends PSDLayerEffect
 
-  constructor: (file, @inner = false) -> 
+  constructor: (file, @inner = false) ->
     super(file)
 
-    #defaults 
+    #defaults
     @blendMode = "mul"
     @color = @nativeColor = [0,0,0,0]
     @opacity = 191
@@ -122,16 +122,16 @@ class PSDDropDownLayerEffect extends PSDLayerEffect
 
     @color = @getSpaceColor()
 
-    [ 
+    [
       @signature,
       @blendMode
     ] =  @file.readf ">4s4s"
 
     @enabled = @file.readBoolean()
     @useAngleInAllFX = @file.readBoolean()
-    
-    [@opacity] = @file.read(1) 
-    
+
+    [@opacity] = @file.read(1)
+
     @nativeColor = @getSpaceColor() if @version == 2
 
     data = {}

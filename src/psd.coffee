@@ -51,7 +51,7 @@ Root.PSD = class PSD
   options:
     layerImages: false # Should we parse layer image data?
     onlyVisibleLayers: false # Should we skip invisible layer image parsing?
-  
+
   constructor: (data) ->
     # Store the main reference to our PSD file
     @file = new PSDFile data
@@ -173,7 +173,7 @@ Root.PSD = class PSD
     result
 
   # Exports a flattened version to a file. For use in NodeJS.
-  toFile: (filename, cb = ->) -> 
+  toFile: (filename, cb = ->) ->
     @parseImageData() unless @image
     @image.toFile filename, cb
 

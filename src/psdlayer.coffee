@@ -144,7 +144,7 @@ class PSDLayer
       Log.debug "Channel #{i}: id=#{channelID}, #{channelLength} bytes, type=#{CHANNEL_SUFFIXES[channelID]}"
 
       @channelsInfo.push id: channelID, length: channelLength
-    
+
   # Parse the blend mode used for this layer including type and opacity
   parseBlendModes: ->
     @blendMode = {}
@@ -154,7 +154,7 @@ class PSDLayer
       @blendMode.key, # blending mode key
       @blendMode.opacity, # 0 - 255
       @blendMode.clipping, # 0 = base, 1 = non-base
-      flags, 
+      flags,
       filler # unused data
     ] = @file.readf ">4s4sBBBB"
 
@@ -168,7 +168,7 @@ class PSDLayer
     @blendMode.visible = (flags & (0x01 << 1)) > 0
     @blendMode.visible = 1 - @blendMode.visible
     @blendMode.obsolete = (flags & (0x01 << 2)) > 0
-    
+
     # PS >= 5.0; tells if bit 4 has useful info
     if (flags & (0x01 << 3)) > 0
       @blendMode.pixelDataIrrelevant = (flags & (0x01 << 4)) > 0
@@ -190,13 +190,13 @@ class PSDLayer
 
     # Parse mask position
     [
-      @mask.top, 
-      @mask.left, 
-      @mask.bottom, 
+      @mask.top,
+      @mask.left,
+      @mask.bottom,
       @mask.right,
 
       # Either 0 or 255
-      @mask.defaultColor, 
+      @mask.defaultColor,
       flags
     ] = @file.readf ">llllBB"
 
@@ -249,10 +249,10 @@ class PSDLayer
     @blendingRanges.channels = []
     for i in [0...@blendingRanges.numChannels]
       @blendingRanges.channels.push
-        source: 
+        source:
           black: @file.readShortInt()
           white: @file.readShortInt()
-        dest: 
+        dest:
           black: @file.readShortInt()
           white: @file.readShortInt()
 
@@ -331,7 +331,7 @@ class PSDLayer
           @adjustments.effects = (new PSDEffectsInfo(@, length)).parse()
         when "selc"
           @adjustments.selectiveColor = (new PSDSelectiveColor(@, length)).parse()
-        else  
+        else
           @file.seek length
           Log.debug("Skipping additional layer info with key #{key}")
 
@@ -339,7 +339,7 @@ class PSDLayer
         Log.debug "Warning: additional layer info with key #{key} - unexpected end. Position = #{@file.tell()}, Expected = #{(pos + length)}"
         @file.seek pos + length, false # Attempt to recover
 
-        
+
   readLayerSectionDivider: ->
     code = @file.readInt()
     @layerType = SECTION_DIVIDER_TYPES[code]
