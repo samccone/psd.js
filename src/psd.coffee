@@ -75,8 +75,8 @@ Root.PSD = class PSD
     # which is used here.
     @parseHeader()
     @parseImageResources()
-    @parseLayersMasks()
-    @parseImageData()
+    # @parseLayersMasks()
+    # @parseImageData()
 
     @endTime = (new Date()).getTime()
     Log.debug "Parsing finished in #{@endTime - @startTime}ms"
